@@ -1,0 +1,75 @@
+<template>
+     <div class="todo-container">
+    <div class="todo-wrap">
+      <!-- 这里是通过v-bind把数据绑到属性里面 传到另外一个组件 另外一个组件通过props接收并设置这个数据使用类型-->
+      <TodoHeader :addTodo="addTodo"/>
+      <TodoList :todos="todos" :deleteTodo="deleteTodo" :toggleTodo="toggleTodo"/>
+      <TodoFooter :todos="todos" :checkAll="checkAll"/>
+    </div>
+  </div>
+</template>
+<script>
+
+// 在父级组件中，引入三个子级组件
+import TodoHeader from './components/TodoHeader.vue'
+import TodoList from './components/TodoList.vue'
+import TodoFooter from './components/TodoFooter.vue'
+
+// Vue.component() 全局的方式注册组件
+export default {
+  name:'App',
+  // 注册组件（局部）
+  components: {
+    TodoHeader,
+    TodoList,
+    TodoFooter,
+  },
+  data(){
+    return { 
+      todos:[
+          {id:1,title:'香蕉',isShow:false},
+          {id:2,title:'苹果',isShow:true},
+          {id:3,title:'橘子',isShow:false},
+      ]
+    }
+  },
+  methods: {
+    // 删除数组的操作
+    deleteTodo(index){
+      this.todos.splice(index,1)
+    },
+    // 添加数据的操作 (添加对象)
+    addTodo(todo){
+      this.todos.unshift(todo)
+    },
+    // 选中  传入一个选项，设置该选项是否被选中
+    toggleTodo(todo){
+      todo.isShow=!todo.isShow
+    },
+    // 是否全选
+    checkAll(isCheck){
+      // 遍历数组中每个数据，设置isShow为true或者false
+      this.todos.forEach(todo => {
+        todo.isShow = isCheck
+      })
+    }
+  }
+
+}
+</script>
+<style scoped>
+
+
+
+/*app*/
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+</style>
